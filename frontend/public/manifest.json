@@ -3,17 +3,17 @@
   "name": "Create React App Sample",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "https://st.depositphotos.com/4320021/54955/v/450/depositphotos_549550836-stock-illustration-chat-message-bubbles-icon-on.jpg",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "logo192.png",
+      "src": "https://st.depositphotos.com/4320021/54955/v/450/depositphotos_549550836-stock-illustration-chat-message-bubbles-icon-on.jpg",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
+      "src": "https://st.depositphotos.com/4320021/54955/v/450/depositphotos_549550836-stock-illustration-chat-message-bubbles-icon-on.jpg",
       "type": "image/png",
       "sizes": "512x512"
     }
