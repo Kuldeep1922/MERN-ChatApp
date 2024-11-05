@@ -91,7 +91,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
         },
       };
       const { data } = await axios.get(`/api/user?search=${search}`, config);
-      console.log(data);
+      // console.log(data);
       setLoading(false);
       setSearchResult(data);
     } catch (error) {
@@ -125,7 +125,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
         isClosable: true,
         position: "top-left",
       });
-      return
+      return;
     }
     try {
       setLoading(true);
@@ -166,7 +166,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
         isClosable: true,
         position: "top-left",
       });
-      return
+      return;
     }
     try {
       setLoading(true);
@@ -185,7 +185,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
       );
       user1._id === user._id ? setSelectedChat() : setSelectedChat(data);
       setFetchAgain(!fetchAgain);
-      fetchMessages()
+      fetchMessages();
       setLoading(false);
     } catch (error) {
       toast({
@@ -231,7 +231,6 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
       setLoading(false);
     }
   };
-
 
   return (
     <>
@@ -301,7 +300,11 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="red" mr={3} onClick={() => handleLeaveGroup(user)}>
+            <Button
+              colorScheme="red"
+              mr={3}
+              onClick={() => handleLeaveGroup(user)}
+            >
               Leave Group
             </Button>
           </ModalFooter>
