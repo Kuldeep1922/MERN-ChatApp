@@ -18,7 +18,7 @@ import {
   useToast,
   Spinner,
 } from "@chakra-ui/react";
-import { BellIcon, ChevronDownIcon } from "@chakra-ui/icons";
+import { BellIcon, ChevronDownIcon, SunIcon } from "@chakra-ui/icons";
 
 import React, { useState } from "react";
 import { ChatState } from "../../Context/ChatProvider";
@@ -101,6 +101,38 @@ const SideDrawer = () => {
       setLoadingChat(false);
     }
   };
+  const handleClick = () => {
+    const existingCover = document.getElementById("darkScreenOverlay");
+
+    if (!existingCover) {
+      const cover = document.createElement("div");
+      cover.id = "darkScreenOverlay";
+
+      // CSS styles for inverted overlay
+      const css = `
+      position: fixed;
+      pointer-events: none;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: white;
+      mix-blend-mode: difference;
+      z-index: 1;
+    `;
+
+      cover.setAttribute("style", css);
+
+      // Add a class to prevent inversion on images
+      document.body.classList.add("invert-colors");
+
+      document.body.appendChild(cover);
+    } else {
+      document.body.classList.remove("invert-colors");
+      document.body.removeChild(existingCover);
+    }
+  };
+
 
   return (
     <>
@@ -114,10 +146,10 @@ const SideDrawer = () => {
         borderWidth="5px"
         style={{ color: "black" }}
       >
-        <Tooltip label="search users to chat" hasArrow placement="bottom-end" >
+        <Tooltip label="search users to chat" hasArrow placement="bottom-end">
           <Button style={{ color: "black" }} variant="outline" onClick={onOpen}>
             <i className="fa-solid fa-magnifying-glass"></i>
-            <Text d={{ base: "none", md: "flex" }} px="4" >
+            <Text d={{ base: "none", md: "flex" }} px="4">
               Search User
             </Text>
           </Button>
@@ -128,6 +160,12 @@ const SideDrawer = () => {
         </Text>
 
         <div>
+          <Menu>
+            <MenuButton p={1} onClick={handleClick}>
+              <SunIcon fontSize="2xl" m={1} style={{ color: "black" }} />
+            </MenuButton>
+          </Menu>
+
           <Menu>
             <MenuButton p={1}>
               <BellIcon fontSize="2xl" m={1} style={{ color: "black" }} />

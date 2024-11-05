@@ -116,7 +116,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               <>
                 <Avatar
                   name={getSender(user, selectedChat.users)}
-                  src={getSenderFull(user, selectedChat.users)}
+                  src={getSenderFull(user, selectedChat.users).pic}
                 />
                 {getSender(user, selectedChat.users)}
                 <ProfileModal user={getSenderFull(user, selectedChat.users)} />
