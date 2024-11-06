@@ -17,13 +17,29 @@ import UpdateGroupChatModal from "./miscellanous/UpdateGroupChatModal";
 import axios from "axios";
 import "./SingleChat.css";
 import ScrollableChat from "./ScrollableChat";
+
+import io from "socket.io-client";
+const ENDPOINT = "http://localhost:5000";
+var socket, selectedChatCompare;
+
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const { user, selectedChat, setSelectedChat } = ChatState();
 
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState();
+  const [socketConnected, setSocketConnected] = useState(false);
+
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    socket.emit("setup", user);
+    socket.on("connection", () => {
+      setSocketConnected(true);
+    });
+  }, []);
+
   const toast = useToast();
+
   const sendMessage = async (event) => {
     if (event.key === "Enter" && newMessage) {
       try {
@@ -43,6 +59,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           config
         );
         // console.log(data);
+        socket.emit("new message",data)
         setMessages([...messages, data]);
       } catch (error) {
         toast({
@@ -74,6 +91,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       // console.log(data);
       setMessages(data);
       setLoading(false);
+      socket.emit("join chat", selectedChat._id);
     } catch (error) {
       toast({
         title: "Error Occured!",
@@ -85,9 +103,24 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       });
     }
   };
+
   useEffect(() => {
     fetchMessages();
+    selectedChatCompare = selectedChat;
   }, [selectedChat]);
+
+  useEffect(() => {
+    socket.on("message recieved", (newMwssageRecieved) => {
+      if (
+        !selectedChatCompare ||
+        selectedChatCompare._id !== newMwssageRecieved.chat._id
+      ) {
+        // give notification
+      } else {
+        setMessages([...messages,newMwssageRecieved])
+      }
+    });
+  });
 
   const typingHandler = (event) => {
     setNewMessage(event.target.value);
