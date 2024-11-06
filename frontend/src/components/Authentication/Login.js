@@ -11,7 +11,6 @@ import {
 import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 const Login = () => {
   const [show, setShow] = useState(false);
   const [email, setEmail] = useState();
@@ -71,39 +70,42 @@ const Login = () => {
     }
   };
   return (
-    <VStack spacing="5px" color="black">
-      <FormControl id="email" isRequired>
-        <FormLabel>Email</FormLabel>
-        <Input
-          value={email}
-          placeholder="Enter Your Email"
-          onChange={(e) => setEmail(e.target.value)}
-          />
-      </FormControl>
-      <FormControl id="password" isRequired>
-        <FormLabel>Password</FormLabel>
-        <InputGroup>
+    <div>
+      <VStack spacing="5px" color="black">
+        <FormControl id="email" isRequired>
+          <FormLabel>Email</FormLabel>
           <Input
-          value={password}
-            type={show ? "text" : "password"}
-            placeholder="Enter Your Password"
-            onChange={(e) => setPassword(e.target.value)}
+            style={{ border: "2px solid blue" }}
+            value={email}
+            placeholder="Enter Your Email"
+            onChange={(e) => setEmail(e.target.value)}
           />
-          <InputRightElement width="4.5rem" size="sm">
-            <Button onClick={handleClick}>{show ? "Hide" : "Show"}</Button>
-          </InputRightElement>
-        </InputGroup>
-      </FormControl>
+        </FormControl>
+        <FormControl id="password" isRequired>
+          <FormLabel>Password</FormLabel>
+          <InputGroup>
+            <Input
+              style={{ border: "2px solid blue" }}
+              value={password}
+              type={show ? "text" : "password"}
+              placeholder="Enter Your Password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <InputRightElement width="4.5rem" size="sm">
+              <Button onClick={handleClick}>{show ? "Hide" : "Show"}</Button>
+            </InputRightElement>
+          </InputGroup>
+        </FormControl>
 
-      <Button
-        colorScheme="green"
-        width="100%"
-        style={{ marginTop: 15 }}
-        onClick={submitHandler}
-        isLoading={loading}
-      >
-        Log In
-      </Button>
+        <Button
+          colorScheme="green"
+          width="100%"
+          style={{ marginTop: 15 }}
+          onClick={submitHandler}
+          isLoading={loading}
+        >
+          Log In
+        </Button>
 
       <Button
         colorScheme="red"
@@ -117,6 +119,7 @@ const Login = () => {
         Get Guest User Credentials
       </Button>
     </VStack>
+    </div>
   );
 };
 

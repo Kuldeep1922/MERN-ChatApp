@@ -46,23 +46,37 @@ const Homepage = (props) => {
         borderRadius="lg"
         borderWidth={"1px"}
         color="black"
-        background="linear-gradient(#a41600, #0024ca, #000000)"
+        background="linear-gradient( #FFDEE9, #B5FFFC, #91EAE4)"
       >
         <Tabs size="md" variant="enclosed">
           <TabList mb="1em">
-            <Tab width="50%">Login</Tab>
             <Tab width="50%">Sign Up</Tab>
+            <Tab width="50%">Login</Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
-              <Login />
+              <Signup />
             </TabPanel>
             <TabPanel>
-              <Signup />
+              <Login />
             </TabPanel>
           </TabPanels>
         </Tabs>
       </Box>
+      <div
+        className="text-muted"
+        style={{
+          color: "white",
+          position: "absolute",
+          bottom: "10px",
+          background: "grey",
+          borderRadius: "10px",
+          paddingLeft: "10px",
+          paddingRight: "10px",
+        }}
+      >
+        &copy; 2024 Kuldeep Sahoo. All rights reserved.
+      </div>
     </Container>
   );
 };

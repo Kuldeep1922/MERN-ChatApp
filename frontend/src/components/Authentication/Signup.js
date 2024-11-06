@@ -9,7 +9,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import  {useNavigate} from "react-router"
+import { useNavigate } from "react-router";
 import axios from "axios";
 
 const Signup = () => {
@@ -69,13 +69,13 @@ const Signup = () => {
         isClosable: true,
         position: "top",
       });
-      localStorage.setItem("userInfo",JSON.stringify(data))
+      localStorage.setItem("userInfo", JSON.stringify(data));
       setLoading(false);
-      navigate("/chats")
+      navigate("/chats");
     } catch (error) {
       toast({
         title: "Error Occured!!!",
-        description:error.response.data.message,
+        description: error.response.data.message,
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -142,6 +142,7 @@ const Signup = () => {
       <FormControl id="name" isRequired>
         <FormLabel>Name</FormLabel>
         <Input
+          style={{ border: "2px solid blue" }}
           placeholder="Enter Your Name"
           onChange={(e) => setName(e.target.value)}
         />
@@ -149,6 +150,7 @@ const Signup = () => {
       <FormControl id="email" isRequired>
         <FormLabel>Email</FormLabel>
         <Input
+          style={{ border: "2px solid blue" }}
           placeholder="Enter Your Email Address"
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -157,6 +159,7 @@ const Signup = () => {
         <FormLabel>Password</FormLabel>
         <InputGroup>
           <Input
+            style={{ border: "2px solid blue" }}
             type={show ? "text" : "password"}
             placeholder="Enter Your Password"
             onChange={(e) => setPassword(e.target.value)}
@@ -171,6 +174,7 @@ const Signup = () => {
         <FormLabel>Confirm Password</FormLabel>
         <InputGroup>
           <Input
+            style={{ border: "2px solid blue" }}
             type={show ? "text" : "password"}
             placeholder="Enter Your Password"
             onChange={(e) => setConfirmpassword(e.target.value)}
@@ -182,9 +186,9 @@ const Signup = () => {
         <FormLabel>Upload Your Picture</FormLabel>
         <InputGroup>
           <Input
+            style={{ border: "2px solid blue" }}
             type="file"
-            p={1.5}
-            accept="image/*"
+paddingTop={".6%"}            accept="image/*"
             onChange={(e) => postDetails(e.target.files[0])}
           />
         </InputGroup>

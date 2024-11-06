@@ -1,0 +1,26 @@
+/* Center and style ResizableBox */
+.resizable-box {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Chat item box */
+.chat-item {
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.chat-item:hover {
+  background-color: #38a2ac;
+}
+
+/* Button styling */
+.new-group-button {
+  background-color: #3182ce;
+  color: white;
+}
+
+.new-group-button:hover {
+  background-color: #2b6cb0;
+}
