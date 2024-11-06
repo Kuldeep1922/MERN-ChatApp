@@ -19,7 +19,7 @@ import "./SingleChat.css";
 import ScrollableChat from "./ScrollableChat";
 
 import io from "socket.io-client";
-const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = "https://chatapp-okjy.onrender.com/"; // befoore deployement http://localhost:5000
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
@@ -59,7 +59,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           config
         );
         // console.log(data);
-        socket.emit("new message",data)
+        socket.emit("new message", data);
         setMessages([...messages, data]);
       } catch (error) {
         toast({
@@ -117,7 +117,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       ) {
         // give notification
       } else {
-        setMessages([...messages,newMwssageRecieved])
+        setMessages([...messages, newMwssageRecieved]);
       }
     });
   });
