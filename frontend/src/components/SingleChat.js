@@ -73,6 +73,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         // console.log(data);
         socket.emit("new message", data);
         setMessages([...messages, data]);
+        setFetchAgain(!fetchAgain);
       } catch (error) {
         toast({
           title: "Error Occured!",
@@ -116,7 +117,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     }
   };
   
-  console.log({notification},"------");
+  // console.log({notification},"------");
   useEffect(() => {
     socket.on("message recieved", (newMwssageRecieved) => {
       if (

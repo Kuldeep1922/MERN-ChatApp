@@ -23,13 +23,20 @@ import axios from "axios";
 import ChatLoading from "./ChatLoading";
 import { getSender, getSenderFull } from "../config/ChatLogics";
 import GroupChatModal from "./miscellanous/GroupChatModal";
+
 const MyChats = ({ fetchAgain }) => {
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [loggedUser, setLoggedUser] = useState();
-  const { user, setUser, selectedChat, setSelectedChat, chats, setChats } =
-    ChatState();
+  const {
+    user,
+    setUser,
+    selectedChat,
+    setSelectedChat,
+    chats,
+    setChats,
+  } = ChatState();
   const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState(false);
   const toast = useToast();
