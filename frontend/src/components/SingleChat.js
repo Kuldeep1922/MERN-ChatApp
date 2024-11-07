@@ -9,6 +9,8 @@ import {
   FormControl,
   Input,
   useToast,
+  Button,
+  Stack,
 } from "@chakra-ui/react";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { getSender, getSenderFull } from "../config/ChatLogics";
@@ -19,7 +21,7 @@ import "./SingleChat.css";
 import ScrollableChat from "./ScrollableChat";
 
 import io from "socket.io-client";
-const ENDPOINT = "https://chatapp-okjy.onrender.com/"; // befoore deployement http://localhost:5000
+const ENDPOINT = "http://localhost:5000"; // befoore deployement http://localhost:5000
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
@@ -29,19 +31,28 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState();
   const [socketConnected, setSocketConnected] = useState(false);
+  const [typing, setTyping] = useState(false);
+  const [isTyping, setIsTyping] = useState();
+  const toast = useToast();
 
   useEffect(() => {
     socket = io(ENDPOINT);
     socket.emit("setup", user);
-    socket.on("connection", () => {
+    socket.on("connected", () => {
       setSocketConnected(true);
     });
+    socket.on("typing", () => setIsTyping(true));
+    socket.on("stop typing", () => setIsTyping(false));
   }, []);
 
-  const toast = useToast();
+  useEffect(() => {
+    fetchMessages();
+    selectedChatCompare = selectedChat;
+  }, [selectedChat]);
 
   const sendMessage = async (event) => {
     if (event.key === "Enter" && newMessage) {
+      socket.emit("stop typing", selectedChat._id);
       try {
         const config = {
           headers: {
@@ -105,11 +116,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   };
 
   useEffect(() => {
-    fetchMessages();
-    selectedChatCompare = selectedChat;
-  }, [selectedChat]);
-
-  useEffect(() => {
     socket.on("message recieved", (newMwssageRecieved) => {
       if (
         !selectedChatCompare ||
@@ -125,6 +131,25 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const typingHandler = (event) => {
     setNewMessage(event.target.value);
     // Typing Indicator Logic
+    if (!socketConnected) {
+      return;
+    }
+    if (!typing) {
+      setTyping(true);
+      socket.emit("typing", selectedChat._id);
+    }
+    let lastTypingTime = new Date().getTime();
+
+    var timerLength = 2000;
+
+    setTimeout(() => {
+      var timeNow = new Date().getTime();
+      var timeDiff = timeNow - lastTypingTime;
+      if (timeDiff >= timerLength && typing) {
+        socket.emit("stop typing", selectedChat._id);
+        setTyping(false);
+      }
+    }, timerLength);
   };
   return (
     <>
@@ -191,6 +216,20 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               </div>
             )}
             <FormControl onKeyDown={sendMessage} isRequired mt={3}>
+              {isTyping ? (
+                <Stack direction="row" spacing={4} align="center">
+                  <Button
+                    isLoading
+                    loadingText="Typing"
+                    colorScheme="teal"
+                    variant="outline"
+                    spinnerPlacement="start"
+                    size="sm"
+                  ></Button>
+                </Stack>
+              ) : (
+                ""
+              )}
               <Input
                 variant="filled"
                 bg={"#E0E0E0"}
