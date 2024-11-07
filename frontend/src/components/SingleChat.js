@@ -25,7 +25,8 @@ const ENDPOINT = "https://chatapp-okjy.onrender.com"; // befoore deployement htt
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
-  const { user, selectedChat, setSelectedChat } = ChatState();
+  const { user, selectedChat, setSelectedChat, notification, setNotification } =
+    ChatState();
 
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -114,7 +115,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       });
     }
   };
-
+  
+  console.log({notification},"------");
   useEffect(() => {
     socket.on("message recieved", (newMwssageRecieved) => {
       if (
@@ -122,11 +124,16 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         selectedChatCompare._id !== newMwssageRecieved.chat._id
       ) {
         // give notification
+        if (!notification.includes(newMwssageRecieved)) {
+          setNotification([newMwssageRecieved,...notification])
+          setFetchAgain(!fetchAgain)
+        }
       } else {
         setMessages([...messages, newMwssageRecieved]);
       }
     });
   });
+  
 
   const typingHandler = (event) => {
     setNewMessage(event.target.value);
@@ -200,6 +207,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             h={"100%"}
             borderRadius={"lg"}
             overflowY={"auto"}
+            
           >
             {/* Messages are Here to be rendered */}
             {loading ? (
