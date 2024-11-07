@@ -12,7 +12,7 @@ import {
   Button,
   Stack,
 } from "@chakra-ui/react";
-import { ArrowBackIcon } from "@chakra-ui/icons";
+import { ArrowBackIcon, ArrowForwardIcon } from "@chakra-ui/icons";
 import { getSender, getSenderFull } from "../config/ChatLogics";
 import ProfileModal from "./miscellanous/ProfileModal";
 import UpdateGroupChatModal from "./miscellanous/UpdateGroupChatModal";
@@ -52,7 +52,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   }, [selectedChat]);
 
   const sendMessage = async (event) => {
-    if (event.key === "Enter" && newMessage) {
+    if ((event.key === "Enter" || event.type === "click") && newMessage) {
       socket.emit("stop typing", selectedChat._id);
       try {
         const config = {
@@ -116,7 +116,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       });
     }
   };
-  
+
   // console.log({notification},"------");
   useEffect(() => {
     socket.on("message recieved", (newMwssageRecieved) => {
@@ -126,15 +126,14 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       ) {
         // give notification
         if (!notification.includes(newMwssageRecieved)) {
-          setNotification([newMwssageRecieved,...notification])
-          setFetchAgain(!fetchAgain)
+          setNotification([newMwssageRecieved, ...notification]);
+          setFetchAgain(!fetchAgain);
         }
       } else {
         setMessages([...messages, newMwssageRecieved]);
       }
     });
   });
-  
 
   const typingHandler = (event) => {
     setNewMessage(event.target.value);
@@ -208,7 +207,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             h={"100%"}
             borderRadius={"lg"}
             overflowY={"auto"}
-            
           >
             {/* Messages are Here to be rendered */}
             {loading ? (
@@ -239,13 +237,18 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               ) : (
                 ""
               )}
-              <Input
-                variant="filled"
-                bg={"#E0E0E0"}
-                placeholder="Enter a message..."
-                onChange={typingHandler}
-                value={newMessage}
-              />
+              <Stack direction="row" spacing={2}>
+                <Input
+                  variant="filled"
+                  bg={"#E0E0E0"}
+                  placeholder="Enter a message..."
+                  onChange={typingHandler}
+                  value={newMessage}
+                />
+                <Button colorScheme="teal" onClick={sendMessage}>
+                  <ArrowForwardIcon/>
+                </Button>
+              </Stack>
             </FormControl>
           </Box>
         </>

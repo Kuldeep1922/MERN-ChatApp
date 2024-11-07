@@ -25,7 +25,7 @@ import { getSender, getSenderFull } from "../config/ChatLogics";
 import GroupChatModal from "./miscellanous/GroupChatModal";
 
 const MyChats = ({ fetchAgain }) => {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(" ");
   const [searchResult, setSearchResult] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [loggedUser, setLoggedUser] = useState();
@@ -65,6 +65,11 @@ const MyChats = ({ fetchAgain }) => {
     setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
     fetchChats();
   }, [fetchAgain]);
+
+  useEffect(() => {
+    handleSearch()
+  }, [])
+  
 
   const handleSearch = async () => {
     if (!search) {

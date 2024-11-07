@@ -20,7 +20,7 @@ import {
 } from "@chakra-ui/react";
 import { BellIcon, ChevronDownIcon, SunIcon } from "@chakra-ui/icons";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ChatState } from "../../Context/ChatProvider";
 import ProfileModal from "./ProfileModal";
 import { useNavigate } from "react-router-dom";
@@ -33,7 +33,7 @@ import NotificationBadge from "react-notification-badge";
 import { Effect } from "react-notification-badge";
 
 const SideDrawer = () => {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(" ");
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState(false);
@@ -143,6 +143,11 @@ const SideDrawer = () => {
       document.body.removeChild(existingCover);
     }
   };
+
+  useEffect(() => {
+    handleSearch()
+  }, [])
+
 
   return (
     <>
