@@ -1,6 +1,14 @@
 ﻿
 # Chat App  
 [Chat App Live Demo](https://chatapp-okjy.onrender.com/)
+
+![login page](/screen1.png)
+![my chats](/screen2.png)
+![my chat + chat box](/screen3.png)
+![search drawer](/screen4.png)
+![profile](/screen5.png)
+![group profile](/screen6.png)
+
 ## Description
 
 Chat App is a real-time messaging application that allows users to communicate seamlessly. It features user authentication, private messaging, and a user-friendly interface, making it easy to connect with friends and family.
