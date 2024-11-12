@@ -54,6 +54,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const sendMessage = async (event) => {
     if ((event.key === "Enter" || event.type === "click") && newMessage) {
       socket.emit("stop typing", selectedChat._id);
+      playMusic("/send.mp3");
       try {
         const config = {
           headers: {
@@ -128,6 +129,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         if (!notification.includes(newMwssageRecieved)) {
           setNotification([newMwssageRecieved, ...notification]);
           setFetchAgain(!fetchAgain);
+          playMusic("/notf.mp3");
         }
       } else {
         setMessages([...messages, newMwssageRecieved]);
@@ -158,6 +160,14 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       }
     }, timerLength);
   };
+
+  function playMusic(song) {
+    let audio = new Audio(song);
+    audio.play().catch((error) => {
+      console.error("Audio playback failed:", error);
+    });
+  }
+
   return (
     <>
       {selectedChat ? (
