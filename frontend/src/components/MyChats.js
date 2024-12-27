@@ -239,7 +239,7 @@ const MyChats = ({ fetchAgain }) => {
                             " : " +
                             chat.latestMessage.content
                           : ""}
-                      </Box>
+                      </Box>z
                     </Box>
                   )}
                 </Text>

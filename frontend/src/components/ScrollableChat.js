@@ -74,21 +74,6 @@
 
 // export default ScrollableChat;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useState } from "react";
 import ScrollableFeed from "react-scrollable-feed";
 import {
@@ -98,16 +83,33 @@ import {
   isSameUser,
 } from "../config/ChatLogics";
 import { ChatState } from "../Context/ChatProvider";
-import { Avatar, Tooltip } from "@chakra-ui/react";
+import { Avatar, Tooltip, useDisclosure } from "@chakra-ui/react";
 import ProfileModal from "./miscellanous/ProfileModal";
+import {
+  Box,
+  Image,
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerCloseButton,
+} from "@chakra-ui/react";
 
 const ScrollableChat = ({ messages }) => {
   const { user } = ChatState();
   const [hoveredMessageId, setHoveredMessageId] = useState(null); // Track hovered message
 
+  const { isOpen, onOpen, onClose } = useDisclosure(); // Chakra UI Drawer hooks
+  const [selectedImage, setSelectedImage] = useState(null); // To store the clicked image URL
+  const handleImageClick = (imageUrl) => {
+    setSelectedImage(imageUrl);
+    onOpen(); // Open the drawer when image is clicked
+  };
+
   return (
     <>
-      <ScrollableFeed >
+      <ScrollableFeed>
         {messages &&
           messages.map((m, i) => (
             <div style={{ display: "flex" }} key={m._id}>
@@ -144,8 +146,34 @@ const ScrollableChat = ({ messages }) => {
                 onMouseEnter={() => setHoveredMessageId(m._id)} // Set hovered message ID
                 onMouseLeave={() => setHoveredMessageId(null)} // Clear hovered message ID
               >
-                {m.content}
+                {m.content.startsWith("http://res.cloudinary.com/") ? (
+                  <img
+                    src={m.content}
+                    alt="Uploaded content"
+                    style={{
+                      maxWidth: "200px",
+                      borderRadius: "10px",
+                      // marginTop: "5px",
+                    }}
+                    onClick={() => handleImageClick(m.content)}
+                  />
+                ) : (
+                  m.content
+                )}
               </span>
+              {selectedImage && (
+                <Drawer isOpen={isOpen} onClose={onClose} size="lg">
+                  <DrawerOverlay />
+                  <DrawerContent>
+                    <DrawerCloseButton />
+                    <DrawerHeader>Image Preview</DrawerHeader>
+                    <DrawerBody>
+                      <Image src={selectedImage} alt="Full image" />
+                    </DrawerBody>
+                  </DrawerContent>
+                </Drawer>
+              )
+              }
               {/* Show timestamp only when the message is hovered */}
               {hoveredMessageId === m._id && (
                 <span

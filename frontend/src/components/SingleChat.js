@@ -11,8 +11,13 @@ import {
   useToast,
   Button,
   Stack,
+  Tooltip,
 } from "@chakra-ui/react";
-import { ArrowBackIcon, ArrowForwardIcon } from "@chakra-ui/icons";
+import {
+  ArrowBackIcon,
+  ArrowForwardIcon,
+  AttachmentIcon,
+} from "@chakra-ui/icons";
 import { getSender, getSenderFull } from "../config/ChatLogics";
 import ProfileModal from "./miscellanous/ProfileModal";
 import UpdateGroupChatModal from "./miscellanous/UpdateGroupChatModal";
@@ -21,7 +26,7 @@ import "./SingleChat.css";
 import ScrollableChat from "./ScrollableChat";
 
 import io from "socket.io-client";
-const ENDPOINT = "https://chatapp-okjy.onrender.com"; // befoore deployement http://localhost:5000
+const ENDPOINT = "http://192.168.43.164:5000"; // befoore deployement http://localhost:5000
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
@@ -168,6 +173,74 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     });
   }
 
+  // Function to handle image upload
+  const handleFileUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const data = new FormData();
+    data.append("file", file);
+    data.append("upload_preset", "ChatApp");
+    data.append("cloud_name", "dada1bgxg");
+
+    try {
+      const response = await fetch(
+        "https://api.cloudinary.com/v1_1/dada1bgxg/image/upload",
+        {
+          method: "post",
+          body: data,
+        }
+      );
+      const result = await response.json();
+      const imageUrl = result.url;
+
+      // Send the image URL as a message
+      sendMessageWithImage(imageUrl);
+    } catch (error) {
+      toast({
+        title: "Image Upload Failed",
+        description: "Could not upload image. Please try again.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+    }
+  };
+
+  // Function to send the image URL as a message
+  const sendMessageWithImage = async (imageUrl) => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+
+      const { data } = await axios.post(
+        "/api/message",
+        {
+          content: imageUrl,
+          chatId: selectedChat._id,
+        },
+        config
+      );
+
+      setMessages([...messages, data]);
+      setFetchAgain(!fetchAgain);
+    } catch (error) {
+      toast({
+        title: "Error Occurred!",
+        description: error.response.data.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+    }
+  };
+
   return (
     <>
       {selectedChat ? (
@@ -212,11 +285,12 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             flexDir={"column"}
             justifyContent={"flex-end"}
             p={3}
-            bg={"#E8E8E8"}
+            // bg={"#E8E8E8"}
             w={"100%"}
             h={"100%"}
             borderRadius={"lg"}
             overflowY={"auto"}
+            className="chataa"
           >
             {/* Messages are Here to be rendered */}
             {loading ? (
@@ -248,15 +322,35 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 ""
               )}
               <Stack direction="row" spacing={2}>
+                <Tooltip
+                  label="click to send a image"
+                  hasArrow
+                  placement="bottom-end"
+                >
+                  <Button
+                    bg={"#2c2c2c"}
+                    colorScheme="white"
+                    onClick={() => document.getElementById("fileInput").click()}
+                  >
+                    <AttachmentIcon />
+                  </Button>
+                </Tooltip>
                 <Input
-                  variant="filled"
+                  id="fileInput"
+                  type="file"
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  onChange={(e) => handleFileUpload(e)}
+                />
+                <Input
+                  // variant="filled"
                   bg={"#E0E0E0"}
                   placeholder="Enter a message..."
                   onChange={typingHandler}
                   value={newMessage}
                 />
                 <Button colorScheme="teal" onClick={sendMessage}>
-                  <ArrowForwardIcon/>
+                  <ArrowForwardIcon />
                 </Button>
               </Stack>
             </FormControl>
