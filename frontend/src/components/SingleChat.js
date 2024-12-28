@@ -26,7 +26,7 @@ import "./SingleChat.css";
 import ScrollableChat from "./ScrollableChat";
 
 import io from "socket.io-client";
-const ENDPOINT = "http://192.168.43.164:5000"; // befoore deployement http://localhost:5000
+const ENDPOINT = "https://chatapp-okjy.onrender.com"; // befoore deployement http://localhost:5000
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
